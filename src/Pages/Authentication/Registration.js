@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useForm } from "react-hook-form"
+import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 
 const Registration = () => {
     const { register, handleSubmit } = useForm();
-    const onSubmit = data => console.log(data);
+    const { createUser, setLoading, updateUserProfile } = useContext(AuthContext)
+
+
+    const onSubmit = data => {
+        data.password.length < 6 ? alert('chottttto hye geche baba!')
+            :
+            createUser(data.email, data.password)
+                .then(result => {
+                    updateUserProfile({
+                        displayName: data.displayName,
+                        photoURL: data.photoURL
+                    });
+                })
+                .catch(e => {
+                    console.error(e);
+                    // setError(e.message);
+                });
+    };
 
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-1" controlId="formGroupEmail">
+            <Form.Group className="mb-1" >
                 <Form.Label>Your Name</Form.Label>
                 <Form.Control
                     type="text"
@@ -33,7 +51,7 @@ const Registration = () => {
                     {...register("password", { required: true })}
                 />
             </Form.Group>
-            <Form.Group className="mb-1" controlId="formGroupPassword">
+            <Form.Group className="mb-1">
                 <Form.Label>Image URL</Form.Label>
                 <Form.Control
                     type="text"

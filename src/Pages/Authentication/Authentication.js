@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Badge, Button, Container } from 'react-bootstrap';
+import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 import Login from './Login';
 import Registration from './Registration';
 
 const Authentication = () => {
+    const { handleGoogleSignIn, handleGithubSignIn } = useContext(AuthContext)
     const [login, setLogin] = useState(true);
 
     const handleToggle = (e) => {
@@ -39,8 +41,8 @@ const Authentication = () => {
                         </div>
 
                         <div className='d-flex  justify-content-between'>
-                            <Button size='sm' variant="outline-primary">Google</Button>
-                            <Button size='sm' variant="outline-secondary">GitHub</Button>
+                            <Button onClick={handleGoogleSignIn} size='sm' variant="outline-primary">Google</Button>
+                            <Button onClick={handleGithubSignIn} size='sm' variant="outline-secondary">GitHub</Button>
                         </div>
 
                     </div>

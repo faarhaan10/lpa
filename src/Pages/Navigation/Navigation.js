@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
 import { Button, Container, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 
 const Navigation = () => {
+    const { user, logOut } = useContext(AuthContext)
     const [dark, setDark] = useState(false)
+    console.log(user);
+
     const handleToggle = (e) => {
         setDark(e.target.checked);
     }
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className='p-0'>
             <Container>
                 <Navbar.Brand as={Link} to="/">
                     <Image src='https://i.ibb.co/QHKZFzQ/image.png' />{' '}
@@ -29,13 +33,17 @@ const Navigation = () => {
 
                     {/* user and authencation part */}
                     <Nav>
-                        <Nav.Link >usename</Nav.Link>
-                        <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                        <Button variant="dark">Logout</Button>
+                        {user?.displayName && <Nav.Link >{user?.displayName}</Nav.Link>}
+                        {
+                            user?.email ?
+                                <Button variant="dark" onClick={logOut}>Logout</Button>
+                                :
+                                <Nav.Link as={Link} to="/login">Login</Nav.Link>
+                        }
 
                         {/* toggle dark/light mode  */}
                         <div>
-                            <input type="checkbox" onClick={handleToggle} className="btn-check" id="btn-check-outlined" autocomplete="off" />
+                            <input type="checkbox" onClick={handleToggle} className="btn-check" id="btn-check-outlined" autoComplete="off" />
                             <label className="btn btn-outline-primary" htmlFor="btn-check-outlined">{!dark ? 'Dark' : 'Light'}</label>
                         </div>
                     </Nav>
